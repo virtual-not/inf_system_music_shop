@@ -35,7 +35,7 @@ def open_auth_window():
     # Создаем основное окно
     root = tk.Tk()
     root.title("Авторизация")
-    root.geometry("400x250")  # Увеличиваем размер окна
+    root.geometry("400x250")
 
     # Поле для логина
     tk.Label(root, text="Логин").grid(row=0, column=0)
