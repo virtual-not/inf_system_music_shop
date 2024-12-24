@@ -1,13 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
 from logic.auth import authenticate_user
+from logic.employee import handle_employee
+from logic.customer import handle_customer
 
 def open_auth_window():
     # Функция для авторизации
     def login():
         username = entry_username.get()
         password = entry_password.get()
-        selected_role = role_combobox.get()  # Получаем выбранную роль из комбобокса
+        selected_role = role_combobox.get()  # Получаем выбранную роль из ComboBox
 
         # Проверка роли и логина/пароля
         if selected_role == "Продавец":
@@ -21,8 +23,10 @@ def open_auth_window():
         if role:
             print(f"Успешный вход! Роль: {role}")
             if role == 'Seller':
+                handle_employee()  # Вызов логики для продавца
                 open_employee_window()  # Открытие окна для продавца
             elif role == 'Customer':
+                handle_customer()  # Вызов логики для покупателя
                 open_customer_window()  # Открытие окна для покупателя
             root.destroy()  # Закрываем окно авторизации после входа
         else:
@@ -31,7 +35,7 @@ def open_auth_window():
     # Создаем основное окно
     root = tk.Tk()
     root.title("Авторизация")
-    root.geometry("400x250")
+    root.geometry("400x250")  # Увеличиваем размер окна
 
     # Поле для логина
     tk.Label(root, text="Логин").grid(row=0, column=0)
@@ -43,40 +47,20 @@ def open_auth_window():
     entry_password = tk.Entry(root, show="*")
     entry_password.grid(row=1, column=1)
 
-    # Выбор роли с помощью комбобокса
+    # Выбор роли с помощью ComboBox
     tk.Label(root, text="Выберите роль").grid(row=2, column=0)
 
     # Создаем комбобокс для выбора роли
-    role_combobox = ttk.Combobox(root, values=["Продавец", "Покупатель"], state="readonly")
-    role_combobox.set("Продавец")  # Устанавливаем роль по умолчанию
+    role_combobox = ttk.Combobox(root, values=["Продавец", "Покупатель"])
+    role_combobox.set("Продавец")  # По умолчанию роль - продавец
     role_combobox.grid(row=2, column=1)
 
     # Кнопка для входа
     button_login = tk.Button(root, text="Войти", command=login)
-    button_login.grid(row=4, column=0, columnspan=2)
+    button_login.grid(row=3, column=0, columnspan=2)
 
     # Место для отображения ошибок
     label_error = tk.Label(root, text="", fg="red")
-    label_error.grid(row=5, column=0, columnspan=2)
+    label_error.grid(row=4, column=0, columnspan=2)
 
     root.mainloop()
-
-# Окна для продавца и покупателя
-def open_employee_window():
-    employee_window = tk.Tk()
-    employee_window.title("Окно продавца")
-    employee_window.geometry("300x200")
-
-    tk.Label(employee_window, text="Добро пожаловать, продавец!").pack()
-
-    employee_window.mainloop()
-
-
-def open_customer_window():
-    customer_window = tk.Tk()
-    customer_window.title("Окно покупателя")
-    customer_window.geometry("300x200")
-
-    tk.Label(customer_window, text="Добро пожаловать, покупатель!").pack()
-
-    customer_window.mainloop()
